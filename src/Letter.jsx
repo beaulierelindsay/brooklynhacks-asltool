@@ -1,4 +1,4 @@
-function LetterBox({ letter } ) {
+function Letter({ letter } ) {
 
     const boxStyle = {
         width: "100px",
@@ -17,4 +17,4 @@ function LetterBox({ letter } ) {
         </div>
     )
 }
-export default LetterBox
+export default Letter

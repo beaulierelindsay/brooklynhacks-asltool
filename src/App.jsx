@@ -1,10 +1,10 @@
 import './App.css'
-import LetterBox from './LetterBox'
+import Letter from './Letter'
 
 function App() {
 
   return (
-    <LetterBox letter='L'/>
+    <Letter letter='L'/>
   )
 }
 
