@@ -1,4 +1,4 @@
-function Letter({ letter } ) {
+function Example({ pic } ) {
 
     const boxStyle = {
         width: "350px",
@@ -12,13 +12,13 @@ function Letter({ letter } ) {
         margin: "0 auto",
         position: "absolute",
         right: "25px",
-        top:"20px"
+        top:"390px"
     }
 
     return (
         <div style={boxStyle}>
-            {letter}
+            <img src={pic} width="100%" height = "100%" style={{objectFit: "contain"}}/>
         </div>
     )
 }
-export default Letter
+export default Example
