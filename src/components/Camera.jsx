@@ -28,7 +28,7 @@ const HAND_CONNECTIONS = [
    [13, 17],
 ];
 
-function Camera() {
+function Camera({ onDetect }) {
    const videoRef = useRef(null);
    const canvasRef = useRef(null);
    const handLandmarkerRef = useRef(null);
@@ -141,6 +141,11 @@ function Camera() {
                      );
                      setDetectedLetter(detected);
 
+                     // after detecting call the function to pass all current letter for future check in learn/quiz
+                     if (onDetect) {
+                        onDetect(detected);
+                     }
+
                      results.landmarks.forEach((hand) => {
                         HAND_CONNECTIONS.forEach(([startIdx, endIdx]) => {
                            const start = hand[startIdx];
@@ -173,6 +178,9 @@ function Camera() {
                      setDetectedLetter("");
                      motionHistoryRef.current.index = [];
                      motionHistoryRef.current.pinky = [];
+                     if (onDetect) {
+                        onDetect("");
+                     }
                   }
                }
 
