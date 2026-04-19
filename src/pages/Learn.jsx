@@ -71,7 +71,7 @@ function Learn() {
       const nextIndex = index + 1
       localStorage.setItem('letterIndex',nextIndex)
       if (index === letters.length - 1) {
-         nav('/coursecomplete')
+         nav('/finalexam')
          return
       }
 
