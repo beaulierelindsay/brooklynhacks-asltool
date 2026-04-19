@@ -63,20 +63,22 @@ function Quiz() {
       "/src/assets/Y.png",
       "/src/assets/Z.png",
    ];
-   const [index, setIndex] = useState(0);
+   const startIndex = (Number(localStorage.getItem('letterIndex')) || 0) - 3
+   const [index, setIndex] = useState(startIndex);
    const [button, setButton] = useState(false);
    const nav = useNavigate();
    function handleClick() {
+      const nextIndex = index + 1
+      setIndex(nextIndex)
       const endCheckpoint = (index + 1) % 3 === 0;
       const lastLetter = index === letters.length - 1;
 
       setButton(false);
-
-      if (endCheckpoint || lastLetter) {
-         nav("/checkpoint", { state: { index } }); // name source for checkpoint
-         return;
+     if (endCheckpoint || lastLetter) {
+         localStorage.setItem('quizDone', 'true')
+         nav('/checkpoint')
+         return
       }
-
       // reset unlock/letter state
       setNextUnlocked(false);
       setDetectedLetter("");

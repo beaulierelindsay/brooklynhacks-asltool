@@ -64,24 +64,33 @@ function Learn() {
       "/src/assets/Z.png",
    ];
 
-   const [index, setIndex] = useState(0);
+   const [index, setIndex] = useState(Number(localStorage.getItem('letterIndex')) || 0)
    const nav = useNavigate();
 
    function handleClick() {
-      const endCheckpoint = (index + 1) % 3 === 0;
-      const lastLetter = index === letters.length - 1;
-
-      if (endCheckpoint || lastLetter) {
-         nav("/checkpoint", { state: { index } }); // name source for checkpoint
-         return;
+      const nextIndex = index + 1
+      localStorage.setItem('letterIndex',nextIndex)
+      if (index === letters.length - 1) {
+         nav('/coursecomplete')
+         return
       }
 
+      if ((index + 1) % 3 === 0 && index < letters.length - 3) {
+         nav('/checkpoint')
+         return
+      }
       // reset unlock/letter state
-      setNextUnlocked(false);
-      setDetectedLetter("");
-      setIndex(index + 1);
+      setNextUnlocked(false)
+      setDetectedLetter("")
+      setIndex(nextIndex)
    }
-
+     
+   const skipToEnd = () => {
+   localStorage.setItem('letterIndex', 23)
+   setIndex(23)
+   setNextUnlocked(false)
+   setDetectedLetter("")
+}
    function handleDetect(letter) {
       setDetectedLetter(letter);
 
@@ -89,18 +98,22 @@ function Learn() {
          setNextUnlocked(true);
       }
    }
-
-   return (
-      <>
+   const restart = () => {
+   localStorage.setItem('letterIndex', 0)
+   localStorage.setItem('quizDone', 'false')
+      setIndex(0)
+      setNextUnlocked(false)
+      setDetectedLetter("")
+}
+      return(
          <div>
             <Camera key={letters[index]} onDetect={handleDetect} />
             <Letter letter={letters[index]} />
             <Example pic={pictures[index]} />
-            <button onClick={handleClick} disabled={!nextUnlocked}>
-               Next
-            </button>
+            <button onClick={handleClick} disabled={!nextUnlocked}>Next</button>
+            <button onClick={restart}>Restart</button>
+            <button onClick={skipToEnd}>Skip to End (temp)</button>
          </div>
-      </>
    );
 }
 export default Learn;
