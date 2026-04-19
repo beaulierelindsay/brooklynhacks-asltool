@@ -1,24 +1,38 @@
-function Letter({ letter } ) {
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
-    const boxStyle = {
-        width: "350px",
-        height: "350px",
-        border: "5px solid black",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        fontSize: "340px",
-        fontWeight: "bold",
-        margin: "0 auto",
-        position: "absolute",
-        right: "25px",
-        top:"20px"
-    }
-
-    return (
-        <div style={boxStyle}>
+function Letter({ letter }) {
+   return (
+      <Box
+         sx={{
+            width: "350px",
+            height: "320px",
+            border: "5px solid",
+            borderColor: "info.main", //
+            backgroundColor: "rgba(255,255,255,0.8)", //
+            borderRadius: "20px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            margin: "0 auto",
+            position: "absolute",
+            right: "25px",
+            top: "25px",
+            boxShadow: 3,
+         }}
+      >
+         <Typography
+            variant="h1"
+            sx={{
+               fontSize: "220px",
+               fontWeight: "bold",
+               color: "info.main", // 💙 blue letter
+            }}
+         >
             {letter}
-        </div>
-    )
+         </Typography>
+      </Box>
+   );
 }
-export default Letter
+
+export default Letter;

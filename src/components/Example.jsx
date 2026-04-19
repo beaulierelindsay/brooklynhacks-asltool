@@ -1,24 +1,36 @@
-function Example({ pic } ) {
+import Box from "@mui/material/Box";
 
-    const boxStyle = {
-        width: "350px",
-        height: "350px",
-        border: "5px solid black",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        fontSize: "340px",
-        fontWeight: "bold",
-        margin: "0 auto",
-        position: "absolute",
-        right: "25px",
-        top:"390px"
-    }
-
-    return (
-        <div style={boxStyle}>
-            <img src={pic} width="100%" height = "100%" style={{objectFit: "contain"}}/>
-        </div>
-    )
+function Example({ pic }) {
+   return (
+      <Box
+         sx={{
+            width: "350px",
+            height: "300px",
+            border: "5px solid",
+            borderColor: "info.main", // 💙 blue outline
+            backgroundColor: "rgba(255,255,255,0.8)", // 🤍 translucent
+            borderRadius: "20px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            margin: "0 auto",
+            position: "absolute",
+            right: "25px",
+            top: "360px",
+            boxShadow: 3,
+         }}
+      >
+         <Box
+            component="img"
+            src={pic}
+            sx={{
+               width: "100%",
+               height: "100%",
+               objectFit: "contain",
+            }}
+         />
+      </Box>
+   );
 }
-export default Example
+
+export default Example;

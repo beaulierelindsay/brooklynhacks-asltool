@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { FilesetResolver, HandLandmarker } from "@mediapipe/tasks-vision";
 import { detectLetter } from "../ASLRules";
+import Box from "@mui/material/Box";
 
 const HAND_CONNECTIONS = [
    [0, 1],
@@ -167,35 +168,35 @@ function Camera({ onDetect }) {
    }, []);
 
    return (
-      <div>
-         <div
-            style={{
-               position: "relative",
-               width: "500px",
-               height: "375px",
+      <Box
+         sx={{
+            width: "65vw", // 👈 BIGGER
+            maxWidth: "900px",
+            height: "500px",
+            ml: 4, // 👈 push from left nicely
+            mt: 4,
+            border: "5px solid",
+            borderColor: "info.main",
+            backgroundColor: "rgba(255,255,255,0.8)",
+            borderRadius: "24px",
+            boxShadow: 3,
+            overflow: "hidden",
+         }}
+      >
+         <Box
+            component="video"
+            ref={videoRef}
+            autoPlay
+            playsInline
+            muted
+            sx={{
+               width: "100%",
+               height: "100%",
+               objectFit: "cover",
+               transform: "scaleX(-1)",
             }}
-         >
-            <video
-               ref={videoRef}
-               autoPlay
-               playsInline
-               muted
-               style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  transform: "scaleX(-1)",
-               }}
-            />
-         </div>
-
-         <div
-            style={{ marginTop: "12px", fontSize: "24px", fontWeight: "bold" }}
-         ></div>
-      </div>
+         />
+      </Box>
    );
 }
 

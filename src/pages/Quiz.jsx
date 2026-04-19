@@ -3,11 +3,15 @@ import Example from "../components/Example";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Camera from "../components/Camera";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
 
 function Quiz() {
    const [detectedLetter, setDetectedLetter] = useState("");
    const [nextUnlocked, setNextUnlocked] = useState(false);
-   let letters = [
+
+   const letters = [
       "A",
       "B",
       "C",
@@ -35,7 +39,8 @@ function Quiz() {
       "Y",
       "Z",
    ];
-   let pictures = [
+
+   const pictures = [
       "/src/assets/A.png",
       "/src/assets/B.png",
       "/src/assets/C.png",
@@ -63,50 +68,88 @@ function Quiz() {
       "/src/assets/Y.png",
       "/src/assets/Z.png",
    ];
-   const startIndex = (Number(localStorage.getItem('letterIndex')) || 0) - 3
+
+   const startIndex = (Number(localStorage.getItem("letterIndex")) || 0) - 3;
    const [index, setIndex] = useState(startIndex);
    const [button, setButton] = useState(false);
    const nav = useNavigate();
+
    function handleClick() {
-      const nextIndex = index + 1
-      setIndex(nextIndex)
+      const nextIndex = index + 1;
       const endCheckpoint = (index + 1) % 3 === 0;
       const lastLetter = index === letters.length - 1;
 
       setButton(false);
-     if (endCheckpoint || lastLetter) {
-         localStorage.setItem('quizDone', 'true')
-         nav('/checkpoint')
-         return
+
+      if (endCheckpoint || lastLetter) {
+         localStorage.setItem("quizDone", "true");
+         nav("/checkpoint");
+         return;
       }
-      // reset unlock/letter state
+
       setNextUnlocked(false);
       setDetectedLetter("");
-      setIndex(index + 1);
+      setIndex(nextIndex);
    }
+
    function showPic() {
       setButton(true);
    }
+
    function handleDetect(letter) {
       setDetectedLetter(letter);
-
       if (letter === letters[index]) {
          setNextUnlocked(true);
       }
    }
 
    return (
-      <>
-         <div>
-            <Letter letter={letters[index]} />
-            <Camera key={letters[index]} onDetect={handleDetect} />
-            <button onClick={handleClick} disabled={!nextUnlocked}>
-               Next
-            </button>
-            <button onClick={showPic}>Don't Know?</button>
-            {button && <Example pic={pictures[index]} />}
-         </div>
-      </>
+      <Container maxWidth={false} sx={{ py: 4 }}>
+         <Box
+            sx={{
+               display: "flex",
+               justifyContent: "space-between",
+               alignItems: "flex-start",
+               px: 4,
+               gap: 4,
+            }}
+         >
+            {/* LEFT: CAMERA */}
+            <Box sx={{ flex: 1 }}>
+               <Camera key={letters[index]} onDetect={handleDetect} />
+
+               {/* BUTTONS */}
+               <Box
+                  sx={{
+                     mt: 2,
+                     display: "flex",
+                     justifyContent: "center",
+                     gap: 2,
+                  }}
+               >
+                  <Button onClick={handleClick} disabled={!nextUnlocked}>
+                     Next
+                  </Button>
+                  <Button onClick={showPic}>Don&apos;t Know?</Button>
+               </Box>
+            </Box>
+
+            {/* RIGHT: LETTER + IMAGE */}
+            <Box
+               sx={{
+                  width: "380px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 3,
+                  alignItems: "center",
+               }}
+            >
+               <Letter letter={letters[index]} />
+               {button && <Example pic={pictures[index]} />}
+            </Box>
+         </Box>
+      </Container>
    );
 }
+
 export default Quiz;
