@@ -30,7 +30,6 @@ const HAND_CONNECTIONS = [
 
 function Camera({ onDetect }) {
    const videoRef = useRef(null);
-   const canvasRef = useRef(null);
    const handLandmarkerRef = useRef(null);
    const animationFrameRef = useRef(null);
 
@@ -75,28 +74,19 @@ function Camera({ onDetect }) {
             console.log("HandLandmarker loaded");
 
             const detectHands = () => {
-               if (
-                  !videoRef.current ||
-                  !canvasRef.current ||
-                  !handLandmarkerRef.current
-               ) {
+               if (!videoRef.current || !handLandmarkerRef.current) {
                   animationFrameRef.current =
                      requestAnimationFrame(detectHands);
                   return;
                }
 
                const video = videoRef.current;
-               const canvas = canvasRef.current;
-               const ctx = canvas.getContext("2d");
 
                if (!video.videoWidth || !video.videoHeight) {
                   animationFrameRef.current =
                      requestAnimationFrame(detectHands);
                   return;
                }
-
-               canvas.width = video.videoWidth;
-               canvas.height = video.videoHeight;
 
                if (video.currentTime !== lastVideoTime) {
                   const results = handLandmarkerRef.current.detectForVideo(
@@ -105,7 +95,6 @@ function Camera({ onDetect }) {
                   );
 
                   lastVideoTime = video.currentTime;
-                  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
                   if (results.landmarks && results.landmarks.length > 0) {
                      const hand = results.landmarks[0];
@@ -126,7 +115,7 @@ function Camera({ onDetect }) {
                         t: now,
                      });
 
-                     // Keep only recent points
+                     // keep only recent points
                      motionHistoryRef.current.index =
                         motionHistoryRef.current.index.filter(
                            (p) => now - p.t < 1200,
@@ -145,35 +134,6 @@ function Camera({ onDetect }) {
                      if (onDetect) {
                         onDetect(detected);
                      }
-
-                     results.landmarks.forEach((hand) => {
-                        HAND_CONNECTIONS.forEach(([startIdx, endIdx]) => {
-                           const start = hand[startIdx];
-                           const end = hand[endIdx];
-
-                           const startX = start.x * canvas.width;
-                           const startY = start.y * canvas.height;
-                           const endX = end.x * canvas.width;
-                           const endY = end.y * canvas.height;
-
-                           ctx.beginPath();
-                           ctx.moveTo(startX, startY);
-                           ctx.lineTo(endX, endY);
-                           ctx.strokeStyle = "lime";
-                           ctx.lineWidth = 2;
-                           ctx.stroke();
-                        });
-
-                        hand.forEach((point) => {
-                           const x = point.x * canvas.width;
-                           const y = point.y * canvas.height;
-
-                           ctx.beginPath();
-                           ctx.arc(x, y, 5, 0, 2 * Math.PI);
-                           ctx.fillStyle = "red";
-                           ctx.fill();
-                        });
-                     });
                   } else {
                      setDetectedLetter("");
                      motionHistoryRef.current.index = [];
@@ -230,25 +190,11 @@ function Camera({ onDetect }) {
                   transform: "scaleX(-1)",
                }}
             />
-            <canvas
-               ref={canvasRef}
-               style={{
-                  width: "100%",
-                  height: "100%",
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  pointerEvents: "none",
-                  transform: "scaleX(-1)",
-               }}
-            />
          </div>
 
          <div
             style={{ marginTop: "12px", fontSize: "24px", fontWeight: "bold" }}
-         >
-            Detected: {detectedLetter || "None"}
-         </div>
+         ></div>
       </div>
    );
 }
